@@ -11,3 +11,19 @@ Wyświetlanie informacji o wartościach odżywczych dań;
 
 Wyświetlenie kolejki zamówień.
 
+## Uruchomienie aplikacji
+
+### Backend
+virtualenv env
+
+source env/bin/activate  # On Windows use `env\Scripts\activate`
+
+pip install django
+
+pip install djangorestframework
+
+python manage.py migrate
+
+python manage.py createsuperuser --email admin@example.com --username admin
+
+python manage.py runserver
