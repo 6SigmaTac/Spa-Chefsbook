@@ -1,9 +1,9 @@
 from django.contrib.auth.models import Group, User
 from rest_framework import viewsets
 
-from chefsbook.chefsbookApi.models.models import Table, OrderPosition, Order
+from chefsbook.chefsbookApi.models.models import Table, OrderPosition, Order, Menu
 from chefsbook.chefsbookApi.serializers import UserSerializer, GroupSerializer, TableSerializer, \
-    OrderPositionSerializer, OrderSerializer
+    OrderPositionSerializer, OrderSerializer, MenuSerializer
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -35,3 +35,8 @@ class OrderPositionViewSet(viewsets.ModelViewSet):
 class OrderViewSet(viewsets.ModelViewSet):
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
+
+
+class MenuViewSet(viewsets.ModelViewSet):
+    queryset = Menu.objects.all()
+    serializer_class = MenuSerializer
