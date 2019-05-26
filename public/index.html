@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Chefsbook</title>
+</head>
+<body>
+<!-- The core Firebase JS SDK is always required and must be listed first -->
+<script src="https://www.gstatic.com/firebasejs/6.0.4/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/6.0.4/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/6.0.4/firebase-database.js"></script>
+<script src="firebase.js"></script>
+<script>
+    function simpleErrorObserver(errorObj) {
+        alert(errorObj.code + ": " + errorObj.message);
+    }
+
+    function simpleOkObserver() {
+        alert("Is ok!");
+    }
+
+    (function () {
+        // FIXME: remove example usage after implementation!
+        loginByEmail("admin@abc.pl", "passwd", simpleOkObserver, simpleErrorObserver);
+        loginByGoogle(simpleOkObserver, simpleErrorObserver);
+        addOrder({
+            table: 'pod oknem',
+            meals: ['zupa za slona', 'schab za suchy'],
+            assigned: userEmail,
+            totalPrice: 3566
+        });
+        getAllOrder(orders => console.log(orders));
+        saveOrder("xd", {
+            status: 'FINISHED',
+            table: 'bar01',
+            meals: ['kebab sredni'],
+            assigned: 'szymon serdel',
+            totalPrice: 899
+        });
+    })();
+</script>
+</body>
+</html>
