@@ -13,8 +13,8 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+    <script src="/__/firebase/init.js"></script>
     <script src="firebase.js"></script>
-
     <div id="navbar">
         <nav class="navbar navbar-default">
             <div class="container-fluid" id="navbar">
@@ -28,18 +28,17 @@
             </div>
         </nav>
     </div>
-	
-    <div id="alert" class="alert" style="display: none;"></div>
-	
-    <div class="container" id="orders2" style="display: none;">
-        <div>
-            <h4>Wybierz kategorię:</h4>
-            <select name="dishCat">
-                <option value="appetizer" onclick="showAppetizers()">Przystawka</option>
-                <option value="dish" onclick="showDishes()">Danie główne</option>
-            </select>
-        </div>
 
+    <div id="alert" class="alert" style="display: none;"></div>
+
+    <div class="container" id="orders2" style="display: none;">
+        <div class="border">
+            <h3>Wybierz kategorię:</h3>
+
+            <div class="btn-primary orders-action wid2" name="Tatar wołowy" onclick="showAppetizers()">Przystawki</div>
+            <div class="btn-primary orders-action wid2 torigth" onclick="showDishes()">Danie główne</div>
+
+        </div>
         <div id="appetizers" style="display: none;">
             <div class="border">
                 <div class="btn-primary orders-action wid1">Grilowane warzywa</div>
@@ -52,7 +51,6 @@
                 <div class="btn-primary orders-action wid2 torigth" value="Beef Tartare" onclick="api(this)">Sprawdź wartości odżywcze</div>
             </div>
         </div>
-
         <div id="disches" style="display: none;">
             <div class="border">
                 <div class="btn-primary orders-action wid1">Kotlet devolay z frytkami i zestawem suruwek</div>
@@ -77,18 +75,15 @@
                 </div>
             </div>
         </div>
-
         <div id="orderBottom" style="display: none;">
             <div class="container">
                 Numer stolika:
                 <input type="text" class="form-control" onchange="putTableNo(this)" />
             </div>
-
             <div class="container">
                 Cena zamówienia:
                 <input type="text" class="form-control" onchange="putPrice(this)" />
             </div>
-
             <div class="container">
                 <h4>Podgląd zamówienia</h4>
                 Nr stolika: <d id="tableNo">(nie podano)</d><br>
@@ -98,15 +93,12 @@
             <div class="container">
                 <div class="btn-primary orders-action" onclick="placeOrder()">Zatwierdź i złóż zamówienie</div>
             </div>
-
         </div>
     </div>
 
-
     <div id="login">
-
         <div class="container">
-			<h2>Witaj w Chefsbook!</h2>
+            <h2>Witaj w Chefsbook!</h2>
             <table class="table borderless">
                 <thead>
                     <tr>
@@ -122,22 +114,18 @@
                         <td colspan=2 class="td fieldTag">Hasło</td>
                         <td colspan=2><input type="password" class="form-control" id="pass"></td>
                     </tr>
-
                 </tbody>
             </table>
-
             <button type="button" class="btn btn-primary" onclick="LoginEmail()">Zaloguj!</button>
         </div>
-		
-		<div class="container">
+
+        <div class="container">
             <button type="button" class="btn btn-primary" onclick="loginByGoogle(SuccessLogIn, simpleErrorObserver)">Logowanie przez serwis Google</button>
         </div>
 
-		
         <div class="container">
             <button type="button" class="btn btn-primary" onclick="switchPanel()">Nie masz jeszcze konta? Zarejstruj się tutaj!</button>
         </div>
-
     </div>
     <div class="container" id="register" style="display: none;">
         <h2>Witaj w Chefsbook!</h2>
@@ -163,85 +151,91 @@
             <button type="button" class="btn btn-primary" onclick="switchPanel()">Posiadasz konto i chcesz się jednak zalogować?</button>
         </div>
     </div>
-    
-	<div id="ordersPanel" style="display: none;">
-		<div id="orders">
-			<h1>Zamówienia</h1>
-			<h2 id="wait"></h2>
-		</div>
 
-		<div id="order" class="container-fluid">
+    <div id="ordersPanel" style="display: none;">
+        <div id="orders">
+            <h1>Zamówienia</h1>
+            <h2 id="wait"></h2>
+        </div>
+        <div id="order" class="container-fluid">
+            
+        </div>
+    </div>
 
-		</div>
-
-	</div>
-		
     <script>
         $(document).ready(function () {
             $("#orders").hide();
         });
-		
+
         function simpleErrorObserver(errorObj) {
             alert(errorObj.code + ": " + errorObj.message);
         }
-
         function SuccessLogIn() {
             isLoggedIn = true;
             document.getElementById("alert").style.display = "none";
             $("#login").hide();
             $("#ordersPanel").show();
         }
-
         function SuccessRegister() {
             isLoggedIn = true;
-			document.getElementById("alert").style.display = "none";
+            document.getElementById("alert").style.display = "none";
             $("#register").hide();
             $("#ordersPanel").show();
         }
-
         function LoginEmail() {
             var email = $("#email").val();
             var pass = $("#pass").val();
             loginByEmail(email, pass, SuccessLogIn, simpleErrorObserver);
             user = $("#email").val();
         }
-
         function Register() {
             var email = $("#regEmail").val();
             var pass = $("#regPass").val();
             registerByEmail(email, pass, SuccessRegister, simpleErrorObserver);
-			user = $("#email").val();
+            user = $("#email").val();
         }
-
         function Orders() {
+            $("#ordersPanel").show();
             $("#orders").show();
             $("#createdorder").remove();
             DisplayOrders();
         }
-		
+
         function Order(order) {
+            $("#singleorder").remove();
             $("div:visible").not("#navbar").hide();
             $("#order").show();
+            $("#ordersPanel").show();
+            $("#orders").hide();
             $("#order").append("<div id='createdorder'></div>");
             $("#createdorder").append("<h2>Zamówienie </h2><br><br>");
-            $.each(orders, function (key, value) {
-                $("#createdorder").append("<h5>" + value + "</h5><br><br>");
-            });
-            $("#createdorder").append("<input type='checkbox'> Stół: " + order.table + "<br><br>");
-            $("#createdorder").append("<input type='checkbox'> Cena: " + totalPrice + "<br><br>");
+            order.meals.forEach(ForEachfunction);
+            $("#createdorder").append("Stół: " + order.table + "<br><br>");
+            $("#createdorder").append("Cena: " + order.totalPrice + "<br><br>");
             $("#createdorder").append("<div id='order' class='col-xs-4'><input type='text' class='form-control' id='comments'><br> <button type='button' class='btn btn-primary' onclick='fSubmit()'>Zapisz</button></div><br><br><br><br>");
-            $("#createdorder").append("<button type='button' class='btn btn-primary' onclick='fSubmit()'>Gotowe</button>");
+            $("#createdorder").append("<button type='button' class='btn btn-primary' onclick='Orders()'>Gotowe</button>");
         }
-
+        function ForEachfunction(item, index) {
+            $("#createdorder").append("<h5>" + item + "</h5><br><br>");
+        }
         function DisplayOrders() {
             $("#wait").append("Wait");
-            var orders = getAllOrder(null);
+            getAllOrder(GetOrdersSuccess);
             //todo foreach rysuj div z id=order i name=id z onclick order
-            orders.each(function (index) {
-                $("#orders").append("<div id='order' name='" + index + "' onclick='Order(" + orders[index] + ")'>Zamówienie " + index + "</div>");
-            });
-
+            //orders.forEach(ForEachfunction2);
             $("#wait").remove();
+
+        }
+        var currobj;
+        function GetOrdersSuccess(result) {
+            $("#orders").append("<div id='singleorder'></div>")
+            var i;
+            
+            for (i = 0; i < Object.keys(result).length; i++) {
+                //console.log(Object.values(result)[i]);
+                currobj = Object.values(result);
+                $("#singleorder").append("<div class='border2 hoverable' id='order' name='" + i + "' onclick='Order("+'currobj['+i+']'+")'><a class='btn-primary'>Zamówienie " + i + "</a></div>");
+            }
         }
 
         var settings = {
@@ -260,51 +254,34 @@
             "processData": false,
             "data": "{\n\"query\":\"1 cup spinach\"\n }"
         }
-		
-		function api(x) {
-			var ingredients = x.getAttribute("value");;
-			console.log(ingredients);
-			settings.data = "{\n\"query\":\"" + ingredients + "\"\n }";
-			console.log(settings.data);
-			$.ajax(settings).done(function (response) {
+
+        function api(x) {
+            var ingredients = x.getAttribute("value");;
+            console.log(ingredients);
+            settings.data = "{\n\"query\":\"" + ingredients + "\"\n }";
+            console.log(settings.data);
+            $.ajax(settings).done(function (response) {
                 alert("Gram: " + response.foods[0].serving_weight_grams + "\n" +
                     "Kalorie: " + response.foods[0].nf_calories + "\n" +
                     "Białko: " + response.foods[0].nf_protein + "\n" +
                     "Cukry: " + response.foods[0].nf_sugars + "\n" +
                     "Weglowodany: " + response.foods[0].nf_total_carbohydrate);
-				});
-		}
-
+            });
+        }
         var isLoggedIn = true;
-
         var user = "";
-
         var loginPanel = document.getElementById("login");
         var registerPanel = document.getElementById("register");
         var addOrderPanel = document.getElementById("orders2");
-		var ordersPanel= document.getElementById("ordersPanel");
-		
-		function Orders2() {
-			if (isLoggedIn) {
-                loginPanel.style.display = "none";
-                registerPanel.style.display = "none";
-                addOrderPanel.style.display = "none";
-				ordersPanel.style.display = "block";
-				Orders();
-            }
-            else {
-                document.getElementById("alert").style.display = "block";
-                document.getElementById("alert").innerHTML = "Musisz być zalogowany aby mieć tutaj dostęp.";
-            }
-		}
-		
-        function showNewOrderDiv() {
-			$("#createdorder").remove();
+        var ordersPanel = document.getElementById("ordersPanel");
+
+        function Orders2() {
             if (isLoggedIn) {
                 loginPanel.style.display = "none";
                 registerPanel.style.display = "none";
-				ordersPanel.style.display = "none";
-                addOrderPanel.style.display = "block";
+                addOrderPanel.style.display = "none";
+                ordersPanel.style.display = "block";
+                Orders();
             }
             else {
                 document.getElementById("alert").style.display = "block";
@@ -312,6 +289,20 @@
             }
         }
 
+        function showNewOrderDiv() {
+            $("#createdorder").remove();
+            $("#singleorder").remove();
+            if (isLoggedIn) {
+                loginPanel.style.display = "none";
+                registerPanel.style.display = "none";
+                ordersPanel.style.display = "none";
+                addOrderPanel.style.display = "block";
+            }
+            else {
+                document.getElementById("alert").style.display = "block";
+                document.getElementById("alert").innerHTML = "Musisz być zalogowany aby mieć tutaj dostęp.";
+            }
+        }
         function switchPanel() {
             if (registerPanel.style.display === "none") {
                 loginPanel.style.display = "none";
@@ -322,13 +313,12 @@
                 registerPanel.style.display = "none";
             }
         }
-
         function showAppetizers() {
+            console.log("asdasfasffa");
             document.getElementById("appetizers").style.display = "block";
             document.getElementById("disches").style.display = "none";
             document.getElementById("orderBottom").style.display = "block";
         }
-
         function showDishes() {
             document.getElementById("disches").style.display = "block";
             document.getElementById("appetizers").style.display = "none";
@@ -340,7 +330,6 @@
             assigned: "",
             totalPrice: 0.0
         }
-
         function placeOrder() {
             if (order.table === 0 || order.meals === "" || order.meals === 0.0) {
                 alert("Proszę najpierw podać wszystkie informacje odnoście zamówienia.");
@@ -352,32 +341,43 @@
             }
         }
 
-
         function putMeal(x) {
             order.meals = x.getAttribute("name");
             document.getElementById("ordMeal").innerHTML = order.meals;
         }
-
         function putTableNo(x) {
             order.table = parseInt(x.value);
             document.getElementById("tableNo").innerHTML = order.table;
         }
-
         function putPrice(x) {
             order.totalPrice = parseFloat(x.value);
             document.getElementById("price").innerHTML = order.totalPrice;
         }
-		
+
     </script>
 </body>
 </html>
 <style>
+    a:link {
+        color: black;
+    }
     body {
         background-color: #dde4f0;
     }
 
+    h3 {
+        font-weight: bold;
+    }
+
     .border {
         border: 2px solid #555555;
+        margin-top: 10px;
+        margin-bottom: 10px;
+        padding-left: 10px;
+        padding-right: 10px;
+        padding-bottom: 10px;
+    }
+    .border2 {
         margin-top: 10px;
         margin-bottom: 10px;
         padding-left: 10px;
