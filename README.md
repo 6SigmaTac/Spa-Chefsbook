@@ -15,3 +15,6 @@ Wyświetlenie kolejki zamówień.
 
 Aby aplikacja działała NIEZBĘDNYM jest uzupełnienie konfiguracji firebase w /public/firebase.js
 Szczegółowa instrukcja uruchomienia własnego środowiska uruchomieniowego firebase dostęþne w oficjalnej dokumentacji.
+
+## Działająca wersja strony
+Strona zdeployowana jest na stronie internetowej: https://chefsbook-8883e.web.app
