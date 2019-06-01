@@ -5,39 +5,464 @@
     <title>Chefsbook</title>
 </head>
 <body>
-<!-- The core Firebase JS SDK is always required and must be listed first -->
-<script src="https://www.gstatic.com/firebasejs/6.0.4/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/6.0.4/firebase-auth.js"></script>
-<script src="https://www.gstatic.com/firebasejs/6.0.4/firebase-database.js"></script>
-<script src="firebase.js"></script>
-<script>
-    function simpleErrorObserver(errorObj) {
-        alert(errorObj.code + ": " + errorObj.message);
-    }
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="jquery-3.4.0.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/6.0.4/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/6.0.4/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/6.0.4/firebase-database.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+    <script src="firebase.js"></script>
 
-    function simpleOkObserver() {
-        alert("Is ok!");
-    }
+    <div id="navbar">
+        <nav class="navbar navbar-default">
+            <div class="container-fluid" id="navbar">
+                <div class="navbar-header" id="navbar">
+                    <a class="navbar-brand" href="#">Chefsbook</a>
+                </div>
+                <ul class="nav navbar-nav">
+                    <li><a href="#" onclick="Orders2()">Kolejka zamówień</a></li>
+                    <li><a href="#" onclick="showNewOrderDiv()">Nowe zamówienie</a></li>
+                </ul>
+            </div>
+        </nav>
+    </div>
+	
+    <div id="alert" class="alert" style="display: none;"></div>
+	
+    <div class="container" id="orders2" style="display: none;">
+        <div>
+            <h4>Wybierz kategorię:</h4>
+            <select name="dishCat">
+                <option value="appetizer" onclick="showAppetizers()">Przystawka</option>
+                <option value="dish" onclick="showDishes()">Danie główne</option>
+            </select>
+        </div>
 
-    (function () {
-        // FIXME: remove example usage after implementation!
-        loginByEmail("admin@abc.pl", "passwd", simpleOkObserver, simpleErrorObserver);
-        loginByGoogle(simpleOkObserver, simpleErrorObserver);
-        addOrder({
-            table: 'pod oknem',
-            meals: ['zupa za slona', 'schab za suchy'],
-            assigned: userEmail,
-            totalPrice: 3566
+        <div id="appetizers" style="display: none;">
+            <div class="border">
+                <div class="btn-primary orders-action wid1">Grilowane warzywa</div>
+                <div class="btn-primary orders-action wid2" name="Grilowane warzywa" onclick="putMeal(this)">Dodaj do zamówienia</div>
+                <div class="btn-primary orders-action wid2 torigth" value="Grilled Veggies" onclick="api(this)">Sprawdź wartości odżywcze</div>
+            </div>
+            <div class="border">
+                <div class="btn-primary orders-action wid1">Tatar wołowy</div>
+                <div class="btn-primary orders-action wid2" name="Tatar wołowy" onclick="putMeal(this)">Dodaj do zamówienia</div>
+                <div class="btn-primary orders-action wid2 torigth" value="Beef Tartare" onclick="api(this)">Sprawdź wartości odżywcze</div>
+            </div>
+        </div>
+
+        <div id="disches" style="display: none;">
+            <div class="border">
+                <div class="btn-primary orders-action wid1">Kotlet devolay z frytkami i zestawem suruwek</div>
+                <div class="btn-primary orders-action wid2" name="Kotlet schabowy z ziemniakami i zestawem surówek" onclick="putMeal(this)">Dodaj do zamówienia</div>
+                <div class="btn-primary orders-action wid2 torigth" value="Pork Chop" onclick="api(this)">Sprawdź wartości odżywcze</div>
+            </div>
+            <div class="border">
+                <div class="btn-primary orders-action wid1">Stek</div>
+                <div class="btn-primary orders-action wid2" name="Stek" onclick="putMeal(this)">Dodaj do zamówienia</div>
+                <div class="btn-primary orders-action wid2 torigth" value="Pork Steak" onclick="api(this)">Sprawdź wartości odżywcze</div>
+            </div>
+            <div class="border">
+                <div class="btn-primary orders-action wid1">Spaghetti Bolognese</div>
+                <div class="btn-primary orders-action wid2" name="Spaghetti Bolognese" onclick="putMeal(this)">Dodaj do zamówienia</div>
+                <div class="btn-primary orders-action wid2 torigth" value="Spaghetti Bolognese" onclick="api(this)">Sprawdź wartości odżywcze</div>
+            </div>
+            <div class="border">
+                <div>
+                    <div class="btn-primary orders-action wid1">Naleśniki z sosem truskawkowym</div>
+                    <div class="btn-primary orders-action wid2" name="Naleśniki z sosem truskawkowym" onclick="putMeal(this)">Dodaj do zamówienia</div>
+                    <div class="btn-primary orders-action wid2 torigth" value="Pancake With Strawberries" onclick="api(this)">Sprawdź wartości odżywcze</div>
+                </div>
+            </div>
+        </div>
+
+        <div id="orderBottom" style="display: none;">
+            <div class="container">
+                Numer stolika:
+                <input type="text" class="form-control" onchange="putTableNo(this)" />
+            </div>
+
+            <div class="container">
+                Cena zamówienia:
+                <input type="text" class="form-control" onchange="putPrice(this)" />
+            </div>
+
+            <div class="container">
+                <h4>Podgląd zamówienia</h4>
+                Nr stolika: <d id="tableNo">(nie podano)</d><br>
+                Zamówione danie: <d id="ordMeal">(nie podano)</d><br>
+                Cena: <d id="price">(nie podano)</d>
+            </div>
+            <div class="container">
+                <div class="btn-primary orders-action" onclick="placeOrder()">Zatwierdź i złóż zamówienie</div>
+            </div>
+
+        </div>
+    </div>
+
+
+    <div id="login">
+
+        <div class="container">
+			<h2>Witaj w Chefsbook!</h2>
+            <table class="table borderless">
+                <thead>
+                    <tr>
+                        <th colspan=4 class="th login">Logowanie z użyciem adresu e-mail</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td colspan=2 class="td fieldTag">Login</td>
+                        <td colspan=2><input type="text" class="form-control" id="email"></td>
+                    </tr>
+                    <tr>
+                        <td colspan=2 class="td fieldTag">Hasło</td>
+                        <td colspan=2><input type="password" class="form-control" id="pass"></td>
+                    </tr>
+
+                </tbody>
+            </table>
+
+            <button type="button" class="btn btn-primary" onclick="LoginEmail()">Zaloguj!</button>
+        </div>
+		
+		<div class="container">
+            <button type="button" class="btn btn-primary" onclick="loginByGoogle(SuccessLogIn, simpleErrorObserver)">Logowanie przez serwis Google</button>
+        </div>
+
+		
+        <div class="container">
+            <button type="button" class="btn btn-primary" onclick="switchPanel()">Nie masz jeszcze konta? Zarejstruj się tutaj!</button>
+        </div>
+
+    </div>
+    <div class="container" id="register" style="display: none;">
+        <h2>Witaj w Chefsbook!</h2>
+        <table class="table borderless">
+            <thead>
+                <tr>
+                    <th colspan=4 class="th login">Zarejstruj się</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td colspan=2 class="td fieldTag">Login</td>
+                    <td colspan=2><input type="text" class="form-control" id="regEmail"></td>
+                </tr>
+                <tr>
+                    <td colspan=2 class="td fieldTag">Hasło</td>
+                    <td colspan=2><input type="password" class="form-control" id="regPass"></td>
+                </tr>
+            </tbody>
+        </table>
+        <button type="button" class="btn btn-primary" onclick="Register()">Zarejstruj!</button>
+        <div class="container">
+            <button type="button" class="btn btn-primary" onclick="switchPanel()">Posiadasz konto i chcesz się jednak zalogować?</button>
+        </div>
+    </div>
+    
+	<div id="ordersPanel" style="display: none;">
+		<div id="orders">
+			<h1>Zamówienia</h1>
+			<h2 id="wait"></h2>
+		</div>
+
+		<div id="order" class="container-fluid">
+
+		</div>
+
+	</div>
+		
+    <script>
+        $(document).ready(function () {
+            $("#orders").hide();
         });
-        getAllOrder(orders => console.log(orders));
-        saveOrder("xd", {
-            status: 'FINISHED',
-            table: 'bar01',
-            meals: ['kebab sredni'],
-            assigned: 'szymon serdel',
-            totalPrice: 899
-        });
-    })();
-</script>
+		
+        function simpleErrorObserver(errorObj) {
+            alert(errorObj.code + ": " + errorObj.message);
+        }
+
+        function SuccessLogIn() {
+            isLoggedIn = true;
+            document.getElementById("alert").style.display = "none";
+            $("#login").hide();
+            $("#ordersPanel").show();
+        }
+
+        function SuccessRegister() {
+            isLoggedIn = true;
+			document.getElementById("alert").style.display = "none";
+            $("#register").hide();
+            $("#ordersPanel").show();
+        }
+
+        function LoginEmail() {
+            var email = $("#email").val();
+            var pass = $("#pass").val();
+            loginByEmail(email, pass, SuccessLogIn, simpleErrorObserver);
+            user = $("#email").val();
+        }
+
+        function Register() {
+            var email = $("#regEmail").val();
+            var pass = $("#regPass").val();
+            registerByEmail(email, pass, SuccessRegister, simpleErrorObserver);
+			user = $("#email").val();
+        }
+
+        function Orders() {
+            $("#orders").show();
+            $("#createdorder").remove();
+            DisplayOrders();
+        }
+		
+        function Order(order) {
+            $("div:visible").not("#navbar").hide();
+            $("#order").show();
+            $("#order").append("<div id='createdorder'></div>");
+            $("#createdorder").append("<h2>Zamówienie </h2><br><br>");
+            $.each(orders, function (key, value) {
+                $("#createdorder").append("<h5>" + value + "</h5><br><br>");
+            });
+            $("#createdorder").append("<input type='checkbox'> Stół: " + order.table + "<br><br>");
+            $("#createdorder").append("<input type='checkbox'> Cena: " + totalPrice + "<br><br>");
+            $("#createdorder").append("<div id='order' class='col-xs-4'><input type='text' class='form-control' id='comments'><br> <button type='button' class='btn btn-primary' onclick='fSubmit()'>Zapisz</button></div><br><br><br><br>");
+            $("#createdorder").append("<button type='button' class='btn btn-primary' onclick='fSubmit()'>Gotowe</button>");
+        }
+
+        function DisplayOrders() {
+            $("#wait").append("Wait");
+            var orders = getAllOrder(null);
+            //todo foreach rysuj div z id=order i name=id z onclick order
+            orders.each(function (index) {
+                $("#orders").append("<div id='order' name='" + index + "' onclick='Order(" + orders[index] + ")'>Zamówienie " + index + "</div>");
+            });
+
+            $("#wait").remove();
+        }
+
+        var settings = {
+            "async": true,
+            "crossDomain": true,
+            "url": "https://trackapi.nutritionix.com/v2/natural/nutrients",
+            "method": "POST",
+            "headers": {
+                "content-type": "application/json",
+                "accept": "application/json",
+                "x-app-id": "2fc7bf82",
+                "x-app-key": "af9bcc59f9dae93b9985a7f6a9e7a9c0",
+                "x-remote-user-id": "0",
+                "cache-control": "no-cache",
+            },
+            "processData": false,
+            "data": "{\n\"query\":\"1 cup spinach\"\n }"
+        }
+		
+		function api(x) {
+			var ingredients = x.getAttribute("value");;
+			console.log(ingredients);
+			settings.data = "{\n\"query\":\"" + ingredients + "\"\n }";
+			console.log(settings.data);
+			$.ajax(settings).done(function (response) {
+                alert("Gram: " + response.foods[0].serving_weight_grams + "\n" +
+                    "Kalorie: " + response.foods[0].nf_calories + "\n" +
+                    "Białko: " + response.foods[0].nf_protein + "\n" +
+                    "Cukry: " + response.foods[0].nf_sugars + "\n" +
+                    "Weglowodany: " + response.foods[0].nf_total_carbohydrate);
+				});
+		}
+
+        var isLoggedIn = true;
+
+        var user = "";
+
+        var loginPanel = document.getElementById("login");
+        var registerPanel = document.getElementById("register");
+        var addOrderPanel = document.getElementById("orders2");
+		var ordersPanel= document.getElementById("ordersPanel");
+		
+		function Orders2() {
+			if (isLoggedIn) {
+                loginPanel.style.display = "none";
+                registerPanel.style.display = "none";
+                addOrderPanel.style.display = "none";
+				ordersPanel.style.display = "block";
+				Orders();
+            }
+            else {
+                document.getElementById("alert").style.display = "block";
+                document.getElementById("alert").innerHTML = "Musisz być zalogowany aby mieć tutaj dostęp.";
+            }
+		}
+		
+        function showNewOrderDiv() {
+			$("#createdorder").remove();
+            if (isLoggedIn) {
+                loginPanel.style.display = "none";
+                registerPanel.style.display = "none";
+				ordersPanel.style.display = "none";
+                addOrderPanel.style.display = "block";
+            }
+            else {
+                document.getElementById("alert").style.display = "block";
+                document.getElementById("alert").innerHTML = "Musisz być zalogowany aby mieć tutaj dostęp.";
+            }
+        }
+
+        function switchPanel() {
+            if (registerPanel.style.display === "none") {
+                loginPanel.style.display = "none";
+                registerPanel.style.display = "block";
+            }
+            else {
+                loginPanel.style.display = "block";
+                registerPanel.style.display = "none";
+            }
+        }
+
+        function showAppetizers() {
+            document.getElementById("appetizers").style.display = "block";
+            document.getElementById("disches").style.display = "none";
+            document.getElementById("orderBottom").style.display = "block";
+        }
+
+        function showDishes() {
+            document.getElementById("disches").style.display = "block";
+            document.getElementById("appetizers").style.display = "none";
+            document.getElementById("orderBottom").style.display = "block";
+        }
+        var order = {
+            table: 0,
+            meals: "",
+            assigned: "",
+            totalPrice: 0.0
+        }
+
+        function placeOrder() {
+            if (order.table === 0 || order.meals === "" || order.meals === 0.0) {
+                alert("Proszę najpierw podać wszystkie informacje odnoście zamówienia.");
+            }
+            else {
+                order.assigned = user;
+                addOrder(order);
+                alert("Zamówienie zostało złożone!");
+            }
+        }
+
+
+        function putMeal(x) {
+            order.meals = x.getAttribute("name");
+            document.getElementById("ordMeal").innerHTML = order.meals;
+        }
+
+        function putTableNo(x) {
+            order.table = parseInt(x.value);
+            document.getElementById("tableNo").innerHTML = order.table;
+        }
+
+        function putPrice(x) {
+            order.totalPrice = parseFloat(x.value);
+            document.getElementById("price").innerHTML = order.totalPrice;
+        }
+		
+    </script>
 </body>
 </html>
+<style>
+    body {
+        background-color: #dde4f0;
+    }
+
+    .border {
+        border: 2px solid #555555;
+        margin-top: 10px;
+        margin-bottom: 10px;
+        padding-left: 10px;
+        padding-right: 10px;
+        padding-bottom: 10px;
+    }
+
+    .alert {
+        width: 100%;
+        hight: 250px;
+        background-color: #d6d6d6;
+        padding-left: 15%;
+        padding-right: 15%;
+        color: red;
+        font-weight: bold;
+    }
+
+    .container {
+        width: 70%;
+        margin-top: 10%;
+        margin-bottom: 10%;
+        margin-left: 10%;
+        margin-right: 10%;
+    }
+
+        .container h2 {
+            padding: 10%;
+            text-align: center;
+        }
+
+    .btn-primary {
+        border: none;
+        color: white;
+        padding: 15px 32px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 10px 10px 10px 10px;
+    }
+
+    .orders-action {
+        display: inline-block;
+        margin: 10px 0px 0px 0px;
+    }
+
+        .orders-action:hover {
+            background-color: #555555;
+            color: white;
+        }
+
+    .wid1 {
+        width: 100%;
+    }
+
+    .wid2 {
+        width: 49%;
+    }
+
+    .torigth {
+        float: right;
+    }
+
+    .login {
+        text-align: center;
+    }
+
+    .fieldTag {
+        font-weight: bold;
+        text-align: right;
+    }
+
+    .borderless td, .borderless th {
+        border: none;
+    }
+
+    select {
+        border: 1px solid #AAA;
+        border-radius: 5px;
+        box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
+        color: #555;
+        padding-top: 3px;
+        padding-bottom: 3px;
+        text-overflow: ellipsis;
+    }
+</style>
+
+
