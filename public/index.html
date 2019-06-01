@@ -221,8 +221,7 @@
         function DisplayOrders() {
             $("#wait").append("Wait");
             getAllOrder(GetOrdersSuccess);
-            //todo foreach rysuj div z id=order i name=id z onclick order
-            //orders.forEach(ForEachfunction2);
+
             $("#wait").remove();
 
         }
@@ -268,7 +267,7 @@
                     "Weglowodany: " + response.foods[0].nf_total_carbohydrate);
             });
         }
-        var isLoggedIn = true;
+        var isLoggedIn = false;
         var user = "";
         var loginPanel = document.getElementById("login");
         var registerPanel = document.getElementById("register");
