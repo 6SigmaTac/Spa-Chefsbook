@@ -5,17 +5,14 @@ Aplikacja służąca usprawnieniu obsługi zamówień w restauracjach. Umożliwi
 
 ## Nasza aplikacja
 
-Aplikacja jest już gotowa! Można zapoznać się z nią pod adresem: https://chefsbook-8883e.web.app
+Aplikacja jest już gotowa! Wystarczy <strog href="https://chefsbook-8883e.web.app">KLIKNĄĆ!</strong>
 
 ## Funkcjonalności
 
-Uwierzytelnianie kont pracowników;
-
-Przyjmowanie zamówień klientów;
-
-Wyświetlanie informacji o wartościach odżywczych dań;
-
-Wyświetlenie kolejki zamówień.
+<li>Uwierzytelnianie kont pracowników;</li>
+<li>Przyjmowanie zamówień klientów;</li>
+<li>Wyświetlanie informacji o wartościach odżywczych dań;</li>
+<li>Wyświetlenie kolejki zamówień.</li>
 
 ## Projekt
 
