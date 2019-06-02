@@ -17,7 +17,7 @@ Aplikacja jest już gotowa!
 
 ## Projekt
 
-Kod to nie wszystko. W ramach projektowania systemu przygotowany został interaktywny prototyp. Dostępny jest pod adresem: https://app.moqups.com/YEztOL7Lmu/view/page/aa9df7b72?ui=0
+Kod to nie wszystko. W ramach projektowania systemu przygotowany został interaktywny <a href="https://app.moqups.com/YEztOL7Lmu/view/page/aa9df7b72?ui=0">prototyp</a> 
 
 ### Pierwsze kroki...
 
