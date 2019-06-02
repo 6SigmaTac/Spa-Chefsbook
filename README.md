@@ -5,8 +5,8 @@ Aplikacja służąca usprawnieniu obsługi zamówień w restauracjach. Umożliwi
 
 ## Nasza aplikacja
 
-Aplikacja jest już gotowa!=
-<button href="https://chefsbook-8883e.web.app">Wypróbuj aplikację</button>
+Aplikacja jest już gotowa!
+<a href="https://chefsbook-8883e.web.app">Wypróbuj aplikację</a>
 
 ## Funkcjonalności
 
