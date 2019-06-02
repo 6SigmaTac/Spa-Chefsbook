@@ -38,7 +38,7 @@ Ustalone przypadki użycia zostały spisane na diagramie przypadków użycia UML
 
 ## Projekt od kuchni
 
-Dostępne są efekty naszych prac, ale nie tylko - w repozytorium <strong href="https://github.com/6SigmaTac/Spa-Chefsbook">6SigmaTac/Spa-Chefsbook</strong> zobaczyć można programistyczne zaplecze, z kodem źródłowym włącznie. Zapraszamy do zapoznania się z Chefsbook od kuchni.
+Dostępne są efekty naszych prac, ale nie tylko - w repozytorium <a href="https://github.com/6SigmaTac/Spa-Chefsbook">6SigmaTac/Spa-Chefsbook</a> zobaczyć można programistyczne zaplecze, z kodem źródłowym włącznie. Zapraszamy do zapoznania się z Chefsbook od kuchni.
 
 ## Uruchomienie aplikacji
 
